@@ -6,6 +6,7 @@ node_modules
 .beyond
 
 # dotenv environment variable files
+credentials
 .env
 .env.development.local
 .env.test.local

@@ -7,7 +7,16 @@ dotenv.config();
 const projectId = process.env.PROJECT_ID;
 const keyFilename = join(process.cwd(), './credentials/gcloud.json');
 
-const logging = projectId && fs.existsSync(keyFilename) ? new Logging({ projectId, keyFilename }) : void 0;
+const logging: Logging = (() => {
+	if (!process.env.LOGS_ENABLED) return;
+
+	if (!projectId && !keyFilename) return new Logging();
+
+	const specs: { projectId?: string; keyFilename?: string } = {};
+	projectId && (specs.projectId = projectId);
+	fs.existsSync(keyFilename) && (specs.keyFilename = keyFilename);
+	return new Logging({ projectId, keyFilename });
+})();
 
 export default class Logger {
 	private id: string;

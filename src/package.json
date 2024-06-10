@@ -1,12 +1,13 @@
 {
 	"name": "@beyond-js/logs",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"title": "BeyondJS Logs",
 	"description": "",
 	"repository": "https://github.com/beyondjs/logs",
 	"license": "MIT",
 	"scripts": {
-		"start": "node --enable-source-maps runners/empty.js"
+		"start": "node --enable-source-maps runners/empty.js",
+		"logs": "node --enable-source-maps runners/create-log.js"
 	},
 	"modules": {
 		"path": "modules"
@@ -14,7 +15,7 @@
 	"dependencies": {
 		"dotenv": "~16.4.5",
 		"@google-cloud/logging": "~11.1.0",
-		"@beyond-js/kernel": "~0.1.8"
+		"@beyond-js/kernel": "~0.1.9"
 	},
 	"devDependencies": {
 		"@beyond-js/local": "~0.1.3",

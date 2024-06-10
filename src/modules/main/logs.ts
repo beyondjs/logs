@@ -8,17 +8,18 @@ const projectId = process.env.PROJECT_ID;
 const keyFilename = join(process.cwd(), './credentials/gcloud.json');
 
 const logging: Logging = (() => {
-	if (!process.env.LOGS_ENABLED) return;
+	if (process.env.LOGS_DISABLED) return;
 
 	if (!projectId && !keyFilename) return new Logging();
 
 	const specs: { projectId?: string; keyFilename?: string } = {};
 	projectId && (specs.projectId = projectId);
 	fs.existsSync(keyFilename) && (specs.keyFilename = keyFilename);
-	return new Logging({ projectId, keyFilename });
+
+	return new Logging(specs);
 })();
 
-export default class Logger {
+export /*bundle*/ class Logger {
 	private id: string;
 	private logger: any;
 
@@ -29,14 +30,15 @@ export default class Logger {
 		this.logger = logging?.log(this.id);
 	}
 
-	async add(text: string, severity: string = 'INFO'): Promise<void> {
+	async add(data: string | Record<string, any>, severity: string = 'INFO'): Promise<void> {
 		const metadata = { severity };
-		const entry = this.logger.entry(metadata, text);
+		const entry = this.logger.entry(metadata, data);
 
-		this.logger ? await this.logger.write(entry) : console.log(text);
+		this.logger ? await this.logger.write(entry) : console.log(data);
 	}
 
 	async get(): Promise<any[]> {
+		const projectId = await logging.auth.getProjectId();
 		const entries = await logging.getEntries({
 			filter: `logName="projects/${projectId}/logs/${this.id}"`
 		});

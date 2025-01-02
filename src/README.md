@@ -23,7 +23,7 @@ npm install @beyond-js/logs
 Create an instance of the Logger class by providing an identifier.
 
 ```typescript
-import Logger from '@beyond-js/logs';
+import { Logger } from '@beyond-js/logs/main';
 
 const logger = new Logger('your-log-identifier');
 
